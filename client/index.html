@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Greenfield Polytechnic – College Management System</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563EB'/><text x='16' y='21' font-size='13' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'>GC</text></svg>" />
+    <script>
+      // Shows any startup error on screen instead of a blank white page
+      (function () {
+        function show(msg) {
+          if (document.getElementById('gpc-error-banner')) return;
+          var d = document.createElement('div');
+          d.id = 'gpc-error-banner';
+          d.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#b91c1c;color:#fff;padding:12px 16px;font:14px/1.45 system-ui,sans-serif';
+          d.textContent = 'Error: ' + msg + '  -  Press F12, open the Console tab and send this message to the developer.';
+          (document.body || document.documentElement).appendChild(d);
+        }
+        window.addEventListener('error', function (e) {
+          if (location.protocol === 'file:') return;
+          if (e.message && e.message.indexOf('ResizeObserver') === 0) return;
+          var t = e.target;
+          show(t && (t.src || t.href) ? 'Could not load ' + (t.src || t.href) : e.message);
+        }, true);
+        window.addEventListener('unhandledrejection', function (e) {
+          if (location.protocol === 'file:') return;
+          show(String((e.reason && e.reason.message) || e.reason));
+        });
+      })();
+    </script>
+    <script nomodule>document.write('<p style="font:16px system-ui;padding:24px">Your browser is too old for this app. Please use the latest Chrome, Edge or Firefox.</p>');</script>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Replaced by the app once it starts. If you can still read this, the app is not running (do not open this file directly). -->
+      <div style="font-family:system-ui,sans-serif;max-width:460px;margin:15vh auto;padding:0 16px;color:#334155;line-height:1.5">
+        <h2 style="margin:0 0 8px">Loading Greenfield Polytechnic…</h2>
+        <p style="margin:0;font-size:14px">If this message does not go away, the app is not running. Do not double-click this file. On Windows double-click <b>start.bat</b> in the main folder, or run <code>npm run setup</code> then <code>npm start</code>, and open <b>http://localhost:5000</b></p>
+      </div>
+    </div>
+    <script>
+      // Opened by double-clicking the file? Explain, then jump to the app as soon as the server is running.
+      (function () {
+        if (location.protocol !== 'file:') return;
+        var root = document.getElementById('root');
+        root.innerHTML =
+          '<div style="font-family:system-ui,sans-serif;max-width:520px;margin:10vh auto;padding:0 16px;color:#334155;line-height:1.6">' +
+          '<h2 style="margin:0 0 6px;color:#0f1a47">Greenfield Polytechnic</h2>' +
+          '<p style="margin:0 0 14px">This file cannot run by double-clicking. The app has to be started first:</p>' +
+          '<ol style="padding-left:20px;margin:0 0 14px"><li>Go to the main <b>greenfield-cms</b> folder</li><li>Double-click <b>start.bat</b> and keep its black window open</li></ol>' +
+          '<p style="margin:0;font-size:14px;color:#64748b"><span id="gpc-wait">Waiting for the app to start&hellip;</span> This page opens the app automatically as soon as it is running, or go to <b>http://localhost:5000</b></p></div>';
+        var ports = [5000, 5050, 5173];
+        (function ping() {
+          var tries = ports.map(function (p) {
+            return fetch('http://localhost:' + p + '/api/health', { mode: 'no-cors' }).then(function () { return p; });
+          });
+          (Promise.any ? Promise.any(tries) : Promise.race(tries))
+            .then(function (p) { location.href = 'http://localhost:' + p + '/'; })
+            .catch(function () { setTimeout(ping, 2000); });
+        })();
+      })();
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

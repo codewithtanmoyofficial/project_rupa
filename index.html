@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Greenfield Polytechnic - start here</title>
+  </head>
+  <body style="margin:0;background:#f8fafc">
+    <div id="root"></div>
+    <script>
+      // Opened by double-clicking the file? Explain, then jump to the app as soon as the server is running.
+      (function () {
+        var root = document.getElementById('root');
+        root.innerHTML =
+          '<div style="font-family:system-ui,sans-serif;max-width:520px;margin:10vh auto;padding:0 16px;color:#334155;line-height:1.6">' +
+          '<h2 style="margin:0 0 6px;color:#0f1a47">Greenfield Polytechnic</h2>' +
+          '<p style="margin:0 0 14px">This file cannot run by double-clicking. The app has to be started first:</p>' +
+          '<ol style="padding-left:20px;margin:0 0 14px"><li>Go to the main <b>greenfield-cms</b> folder</li><li>Double-click <b>start.bat</b> and keep its black window open</li></ol>' +
+          '<p style="margin:0;font-size:14px;color:#64748b"><span id="gpc-wait">Waiting for the app to start&hellip;</span> This page opens the app automatically as soon as it is running, or go to <b>http://localhost:5000</b></p></div>';
+        var ports = [5000, 5050, 5173];
+        (function ping() {
+          var tries = ports.map(function (p) {
+            return fetch('http://localhost:' + p + '/api/health', { mode: 'no-cors' }).then(function () { return p; });
+          });
+          (Promise.any ? Promise.any(tries) : Promise.race(tries))
+            .then(function (p) { location.href = 'http://localhost:' + p + '/'; })
+            .catch(function () { setTimeout(ping, 2000); });
+        })();
+      })();
+    </script>
+  </body>
+</html>
